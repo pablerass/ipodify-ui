@@ -101,13 +101,7 @@ class User extends Component {
   }
 
   logOut() {
-    fetch("http://localhost:5000/logout")
-      .then((respose) => {
-        // TODO: Manage errors
-        this.setState({
-          isLoggedIn: false
-        })
-      })
+    window.location.href = 'http://localhost:5000/logout'
   }
 
   render() {

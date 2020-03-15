@@ -24,6 +24,7 @@ class User extends Component {
     fetch("http://localhost:5000/me", { credentials: 'include' })
       .then((response) => {
         if (response.status === 200) {
+          // TODO: Find a better way to manage errors
           response.json().then((result) => {
             this.setState({
               isLoaded: true,
@@ -39,20 +40,29 @@ class User extends Component {
         } else {
           // TODO: Raise error and break things
         }
-      }
-    )
+      })
+  }
+
+  logOut() {
+    fetch("http://localhost:5000/logout")
+      .then((respose) => {
+        // TODO: Manage errors
+        this.setState({
+          isLoggedIn: false
+        })
+      })
   }
 
   render() {
     const { isLoaded, isLoggedIn, user } = this.state;
     if (!isLoaded) {
-      return <p>Loading...</p>
+      return <LoginButton />
     } else if (!isLoggedIn) {
       return <LoginButton />
     } else {
       return (
-        <NavDropdown title={user} id="basic-nav-dropdown">
-          <NavDropdown.Item>Log Out</NavDropdown.Item>
+        <NavDropdown title={user} alignRight id="dropdown-menu-align-right">
+          <NavDropdown.Item onClick={() => this.logOut()}>Log Out</NavDropdown.Item>
         </NavDropdown>
       )
     }
@@ -61,9 +71,12 @@ class User extends Component {
 
 function App() {
   return (
-    <Navbar bg="primary">
-      <Navbar.Brand href="#home">ipodify</Navbar.Brand>
-      <User />
+    <Navbar>
+      <Navbar.Brand>ipodify</Navbar.Brand>
+      <Navbar.Toggle />
+      <Navbar.Collapse className="justify-content-end">
+        <User />
+      </Navbar.Collapse>
     </Navbar>
   );
 }

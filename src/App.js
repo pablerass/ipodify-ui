@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import { Button, Container, Navbar, NavDropdown, Table } from 'react-bootstrap';
+import { Button, Col, Container, Navbar, NavDropdown, Row } from 'react-bootstrap';
+import Playlists from './components/Playlists';
 
 import './App.css';
 
@@ -8,63 +9,6 @@ function LoginButton() {
   return (
     <Button onClick={() => window.location.href = 'http://localhost:5000/login'}>Login</Button>
   )
-}
-
-class Playlist extends Component {
-  constructor() {
-    super()
-    this.state = {
-      isLoaded: false,
-      songs: []
-    }
-  }
-
-  componentDidMount() {
-    fetch("http://localhost:5000/library", { credentials: 'include' })
-      .then((response) => {
-        if (response.status === 200) {
-          // TODO: Find a better way to manage errors
-          response.json().then((result) => {
-            this.setState({
-              isLoaded: true,
-              songs: result.songs
-            });
-          })
-        } else {
-          // TODO: Raise error and break things
-        }
-      })
-  }
-
-  render() {
-    const { isLoaded, songs } = this.state;
-    if (!isLoaded) {
-      return <p>Loading...</p>
-    } else {
-      return (
-        <Table striped bordered hover size="sm">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Artist</th>
-              <th>Album</th>
-            </tr>
-          </thead>
-          <tbody>
-            {songs.map((song) => {
-              return (
-                <tr key={song.spotify_uri}>
-                  <td>{song.name}</td>
-                  <td>{song.artists.join(", ")}</td>
-                  <td>{song.album}</td>
-                </tr>
-              )
-           })}
-          </tbody>
-        </Table>
-      )
-    }
-  }
 }
 
 class User extends Component {
@@ -122,7 +66,7 @@ class User extends Component {
 
 function App() {
   return (
-    <Container>
+    <div>
       <Navbar>
         <Navbar.Brand>ipodify</Navbar.Brand>
         <Navbar.Toggle />
@@ -130,8 +74,16 @@ function App() {
           <User />
         </Navbar.Collapse>
       </Navbar>
-      <Playlist />
-    </Container>
+      <Container>
+        <Row>
+          <Col>
+            <Playlists />
+          </Col>
+          <Col>2 of 3</Col>
+          <Col>3 of 3</Col>
+        </Row>
+      </Container>
+    </div>
   );
 }
 
